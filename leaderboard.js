@@ -38,7 +38,7 @@ if (Meteor.isClient) {
     var path = new paper.Path();
     // Give the stroke a color
     path.strokeColor = 'black';
-    var start = new paper.Point(100, 100);
+    var start = new paper.Point(500, 200);
     // Move to start and draw a line from there
     path.moveTo(start);
     // Note that the plus operator on Point objects does not work
