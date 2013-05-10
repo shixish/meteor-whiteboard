@@ -111,6 +111,7 @@ if (Meteor.isClient) {
   Template.whiteboard.paths = function () {
     console.log('render the paths');
     //Paths.findOne();//this tells meteor to watch for updates...
+    paper.project.activeLayer.removeChildren();
     var paths = Paths.find().fetch();
     for(var p in paths){
       new paper.Path(paths[p]);
