@@ -51,6 +51,28 @@ if (Meteor.isClient) {
     }
     Session.set("paper_initialized", true);
     console.log('initialized');
+    
+    var segments1 = [], segments2 = [], segments3 = [], segments4 = [];
+    
+    for(var i = 0; i < 1000; i++){
+      segments1.push(new paper.Point(50+i, 50));
+      segments2.push(new paper.Point(50+i, 100));
+      segments3.push(new paper.Point(50+i, 150));
+      segments4.push(new paper.Point(50+i, 200));
+    }
+    
+    setInterval(function(){
+      new paper.Path({segments:segments1, strokeColor: 'black',});
+    }, 1);
+    setInterval(function(){
+      new paper.Path({segments:segments2, strokeColor: 'black',});
+    }, 1);
+    setInterval(function(){
+      new paper.Path({segments:segments3, strokeColor: 'black',});
+    }, 1);
+    setInterval(function(){
+      new paper.Path({segments:segments4, strokeColor: 'black',});
+    }, 1);
   }
   
   Template.leaderboard.players = function () {
