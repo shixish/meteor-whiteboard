@@ -3,16 +3,19 @@
 </head>
 
 <body>
-  {{> canvas}}
+  {{> whiteboard}}
 </body>
 
 <template name="canvas">
   <canvas id="canvas" style="width:100%;height:500px"></canvas>
+</template>
+
+<template name="whiteboard">
+  {{> canvas}}
   {{paths}}
 </template>
 
 <template name="leaderboard">
-  <h3>wut</h3>
   <div class="leaderboard">
     {{#each players}}
       {{> player}}
