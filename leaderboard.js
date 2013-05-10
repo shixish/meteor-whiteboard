@@ -11,6 +11,11 @@ function addPath(path){
 }
 
 if (Meteor.isClient) {
+  //
+  //Meteor.startup(function(){
+  //  console.log('startup');
+  //});
+  
   Template.leaderboard.players = function () {
     return Players.find({}, {sort: {score: -1, name: 1}});
   };
@@ -39,7 +44,7 @@ if (Meteor.isClient) {
   //var mouse_down = false;
   //var path;
   //
-  //Template.canvas.events({
+  //Template.whiteboard.events({
   //  'mousedown': function(event){
   //    console.log("down");
   //    mouse_down = true;
@@ -59,6 +64,13 @@ if (Meteor.isClient) {
   //  }
   //});
   
+  //Template.whiteboard.events({
+  //  'click': function(event){
+  //    Session.set("paper_initialized", true);
+  //    console.log(Session.get("paper_initialized"));
+  //  },
+  //});
+  
   Template.whiteboard.paths = function () {
     console.log('render the paths');
     //Paths.findOne();//this tells meteor to watch for updates...
@@ -68,116 +80,56 @@ if (Meteor.isClient) {
     }
   };
   
-  Template.canvas.init = function(){
-    console.log('init');
-    var canvas = document.getElementById('canvas');//document.createElement('canvas');
-    paper.setup(canvas);
-    var path;
-    paper.tool.onMouseDown = function(event) {
-      // If we produced a path before, deselect it:
-      if (path) {
-          path.selected = false;
-      }
-      // Create a new path and set its stroke color to black:
-      path = new paper.Path({
-        segments: [event.point],
-        strokeColor: 'black',
-        //fullySelected: true
-      });
-    }
-    
-    // While the user drags the mouse, points are added to the path
-    // at the position of the mouse:
-    paper.tool.onMouseDrag = function(event) {
-      path.add(event.point);
-    }
-    
-    // When the mouse is released, we simplify the path:
-    paper.tool.onMouseUp = function(event) {
-      path.simplify(10);
-      addPath(path);
-    }
+  Template.whiteboard.created = function(){
+    Session.set("paper_initialized", false);
   }
   
-  Meteor.startup(function(){
-    console.log('startup');
-  });
-  
-  Template.canvas.created = function(){
-    //this.canvas = document.createElement("canvas");
-    //paper.setup(this.canvas);
+  Template.whiteboard.paper_initialized = function(){
+    return Session.get("paper_initialized");
   }
   
-  Template.canvas.rendered = function(){
-    console.log('rendered')
-    //console.log(this.firstNode);
-    //window.t = this.firstNode;
-    
-    //this.firstNode.appendChild(canvas);
+  Template.whiteboard.rendered = function(){
     //Note: use Paths.find().fetch() to check out the db.
     
     // Get a reference to the canvas object
-    var canvas = this.firstNode;//document.getElementById('canvas');
-    //// Create an empty project and a view for the canvas:
-    paper.setup(canvas);
-    //
-    //var paths = Paths.find().fetch();
-    //for(var p in paths){
-    //  new paper.Path(paths[p]);
-    //}
-    //
-    //var path;
-    
-    //var textItem = new paper.PointText({
-    //  content: 'Click and drag to draw a line.',
-    //  point: new paper.Point(20, 30),
-    //  fillColor: 'black',
-    //});
-    //
-    //paper.tool.onMouseDown = function(event) {
-    //  // If we produced a path before, deselect it:
-    //  if (path) {
-    //      path.selected = false;
-    //  }
-    //  // Create a new path and set its stroke color to black:
-    //  path = new paper.Path({
-    //    segments: [event.point],
-    //    strokeColor: 'black',
-    //    // Select the path, so we can see its segment points:
-    //    //fullySelected: true
-    //  });
-    //}
-    //
-    //// While the user drags the mouse, points are added to the path
-    //// at the position of the mouse:
-    //paper.tool.onMouseDrag = function(event) {
-    //  path.add(event.point);
-    //  // Update the content of the text item to show how many
-    //  // segments it has:
-    //  //textItem.content = 'Segment count: ' + path.segments.length;
-    //}
-    //
-    //// When the mouse is released, we simplify the path:
-    //paper.tool.onMouseUp = function(event) {
-    //  //var segmentCount = path.segments.length;
-    //  // When the mouse is released, simplify it:
-    //  path.simplify(10);
-    //  // Select the path, so we can see its segments:
-    //  //path.fullySelected = true;
-    //  //Paths.push(path.toJSON());
-    //  addPath(path);
-    //  //var newSegmentCount = path.segments.length;
-    //  //var difference = segmentCount - newSegmentCount;
-    //  //var percentage = 100 - Math.round(newSegmentCount / segmentCount * 100);
-    //  //textItem.content = difference + ' of the ' + segmentCount + ' segments were removed. Saving ' + percentage + '%';
-    //}
+    if (!Session.get("paper_initialized")){
+      var canvas = this.firstNode;//document.getElementById('canvas');
+      //console.log(canvas);
+      //// Create an empty project and a view for the canvas:
+      paper.setup(canvas);
+      
+      var path;
+      
+      paper.tool.onMouseDown = function(event) {
+        console.log('mousedown');
+        // If we produced a path before, deselect it:
+        if (path) {
+            path.selected = false;
+        }
+        // Create a new path and set its stroke color to black:
+        path = new paper.Path({
+          segments: [event.point],
+          strokeColor: 'black',
+          //fullySelected: true
+        });
+      }
+      
+      // While the user drags the mouse, points are added to the path
+      // at the position of the mouse:
+      paper.tool.onMouseDrag = function(event) {
+        path.add(event.point);
+      }
+      
+      // When the mouse is released, we simplify the path:
+      paper.tool.onMouseUp = function(event) {
+        path.simplify(10);
+        addPath(path);
+      }
+      Session.set("paper_initialized", true);
+      console.log('initialized');
+    }
+    console.log('rendered');
   }
-  
-  //Template.canvas.addPath = function(path){
-  //  json = path.toJSON();
-  //  console.log(path, json);
-  //  //Players.insert({segments: json.segments, strokeColor: json.strokeColor});
-  //}
 }
 
 // On server startup, create some players if the database is empty.
