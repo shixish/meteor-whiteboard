@@ -3,11 +3,13 @@
 </head>
 
 <body>
-  <div id="outer">
-    {{> leaderboard}}
-  </div>
-  <canvas id="canvas" resize></canvas>
+  {{> canvas}}
 </body>
+
+<template name="canvas">
+  <canvas id="canvas" style="width:100%;height:500px"></canvas>
+  {{paths}}
+</template>
 
 <template name="leaderboard">
   <div class="leaderboard">

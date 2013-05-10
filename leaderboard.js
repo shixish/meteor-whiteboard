@@ -2,6 +2,13 @@
 // it is backed by a MongoDB collection named "players".
 
 Players = new Meteor.Collection("players");
+Paths = new Meteor.Collection("paths");
+
+function addPath(path){
+  var json = path.toJSON(), type = json[0], data = json[1];
+  //console.log(type, data);
+  Paths.insert(data);
+}
 
 if (Meteor.isClient) {
   Template.leaderboard.players = function () {
@@ -29,63 +36,99 @@ if (Meteor.isClient) {
     }
   });
   
-  Template.leaderboard.rendered = function(){
+  //Template.canvas.events({
+  //  'mousedown': function(){
+  //    //console.log("paper:", paper);
+  //  },
+  //  'mouseup': function(){
+  //    
+  //  }
+  //});
+  Template.canvas.paths = function () {
+    console.log('re-render the paths');
+    Paths.findOne();//this tells meteor to watch for updates...
+    //var paths = Paths.find().fetch();
+    //console.log('paths:', paths);
+    //for(var p in paths){
+    //  //console.log(paths[p]);
+    //  new paper.Path(paths[p]);
+    //}
+  };
+  
+  //Template.canvas.output = function(){
+  //  return paper.view._element;
+  //}
+  
+  Template.canvas.created = function(){
+    //this.canvas = document.createElement("canvas");
+    //paper.setup(this.canvas);
+  }
+  
+  Template.canvas.rendered = function(){
+    //Note: use Paths.find().fetch() to check out the db.
+    
     // Get a reference to the canvas object
-    var canvas = document.getElementById('canvas');
+    var canvas = this.firstNode;//document.getElementById('canvas');
     // Create an empty project and a view for the canvas:
     paper.setup(canvas);
-    // Create a Paper.js Path to draw a line into it:
-    var path = new paper.Path();
-    // Give the stroke a color
-    path.strokeColor = 'black';
-    var start = new paper.Point(500, 200);
-    // Move to start and draw a line from there
-    path.moveTo(start);
-    // Note that the plus operator on Point objects does not work
-    // in JavaScript. Instead, we need to call the add() function:
-    path.lineTo(start.add([ 200, -50 ]));
-    // Draw the view now:
-    paper.view.draw();
-
-//		var layer = paper.project.activeLayer;
-//
-//		var values = {
-//			count: 34,
-//			points: 32
-//		};
-//
-//		for (var i = 0; i < values.count; i++) {
-//			var path = new paper.Path({
-//				fillColor: i % 2 ? 'red' : 'black',
-//				closed: true
-//			});
-//
-//			var offset = new paper.Point(20 + 10 * i, 0);
-//			var l = offset.length;
-//			for (var j = 0; j < values.points * 2; j++) {
-//				offset.angle += 360 / values.points;
-//				var vector = offset.normalize(l * (j % 2 ? 0.1 : -0.1));
-//				path.add(offset + vector);
-//			}
-//			path.smooth();
-//			var placedSymbol = new paper.PlacedSymbol(path);
-//			layer.insertChild(0, placedSymbol);
-//		}
-//    console.log(paper.view);
-//		paper.view.onFrame = function (event) {
-//			for (var i = 0; i < values.count; i++) {
-//				var item = layer.children[i];
-//				var angle = (values.count - i) * Math.sin(event.count / 128) / 10;
-//				item.rotate(angle);
-//			}
-//		}
-//		
-//		// Reposition the paths whenever the window is resized:
-//		paper.view.onResize = function(event) {
-//			layer.position = view.center;
-//		}
-//    paper.view.draw();
+    
+    var paths = Paths.find().fetch();
+    for(var p in paths){
+      new paper.Path(paths[p]);
+    }
+    
+    var path;
+    
+    //var textItem = new paper.PointText({
+    //  content: 'Click and drag to draw a line.',
+    //  point: new paper.Point(20, 30),
+    //  fillColor: 'black',
+    //});
+    
+    paper.tool.onMouseDown = function(event) {
+      // If we produced a path before, deselect it:
+      if (path) {
+          path.selected = false;
+      }
+      // Create a new path and set its stroke color to black:
+      path = new paper.Path({
+        segments: [event.point],
+        strokeColor: 'black',
+        // Select the path, so we can see its segment points:
+        //fullySelected: true
+      });
+    }
+    
+    // While the user drags the mouse, points are added to the path
+    // at the position of the mouse:
+    paper.tool.onMouseDrag = function(event) {
+      path.add(event.point);
+      // Update the content of the text item to show how many
+      // segments it has:
+      //textItem.content = 'Segment count: ' + path.segments.length;
+    }
+    
+    // When the mouse is released, we simplify the path:
+    paper.tool.onMouseUp = function(event) {
+      //var segmentCount = path.segments.length;
+      // When the mouse is released, simplify it:
+      path.simplify(10);
+      // Select the path, so we can see its segments:
+      //path.fullySelected = true;
+      //Paths.push(path.toJSON());
+      addPath(path);
+      //var newSegmentCount = path.segments.length;
+      //var difference = segmentCount - newSegmentCount;
+      //var percentage = 100 - Math.round(newSegmentCount / segmentCount * 100);
+      //textItem.content = difference + ' of the ' + segmentCount + ' segments were removed. Saving ' + percentage + '%';
+    }
   }
+  
+  //Template.canvas.addPath = function(path){
+  //  json = path.toJSON();
+  //  console.log(path, json);
+  //  //Players.insert({segments: json.segments, strokeColor: json.strokeColor});
+  //}
 }
 
 // On server startup, create some players if the database is empty.
