@@ -11,10 +11,47 @@ function addPath(path){
 }
 
 if (Meteor.isClient) {
-  //
-  //Meteor.startup(function(){
-  //  console.log('startup');
-  //});
+  Meteor.startup(function(){
+    console.log('startup');
+    initialize();
+  });
+  
+  var canvas;
+  function initialize(){
+    canvas = document.getElementById('canvas');
+    //console.log(canvas);
+    //// Create an empty project and a view for the canvas:
+    paper.setup(canvas);
+    
+    var path;
+    
+    paper.tool.onMouseDown = function(event) {
+      // If we produced a path before, deselect it:
+      if (path) {
+          path.selected = false;
+      }
+      // Create a new path and set its stroke color to black:
+      path = new paper.Path({
+        segments: [event.point],
+        strokeColor: 'black',
+        //fullySelected: true
+      });
+    }
+    
+    // While the user drags the mouse, points are added to the path
+    // at the position of the mouse:
+    paper.tool.onMouseDrag = function(event) {
+      path.add(event.point);
+    }
+    
+    // When the mouse is released, we simplify the path:
+    paper.tool.onMouseUp = function(event) {
+      path.simplify(10);
+      addPath(path);
+    }
+    Session.set("paper_initialized", true);
+    console.log('initialized');
+  }
   
   Template.leaderboard.players = function () {
     return Players.find({}, {sort: {score: -1, name: 1}});
@@ -80,12 +117,12 @@ if (Meteor.isClient) {
     }
   };
   
-  Template.whiteboard.created = function(){
-    Session.set("paper_initialized", false);
-  }
-  
   Template.whiteboard.paper_initialized = function(){
     return Session.get("paper_initialized");
+  }
+  
+  Template.whiteboard.created = function(){
+    Session.set("paper_initialized", false);
   }
   
   Template.whiteboard.rendered = function(){
@@ -93,43 +130,11 @@ if (Meteor.isClient) {
     
     // Get a reference to the canvas object
     if (!Session.get("paper_initialized")){
-      var canvas = this.firstNode;//document.getElementById('canvas');
-      //console.log(canvas);
-      //// Create an empty project and a view for the canvas:
-      paper.setup(canvas);
-      
-      var path;
-      
-      paper.tool.onMouseDown = function(event) {
-        console.log('mousedown');
-        // If we produced a path before, deselect it:
-        if (path) {
-            path.selected = false;
-        }
-        // Create a new path and set its stroke color to black:
-        path = new paper.Path({
-          segments: [event.point],
-          strokeColor: 'black',
-          //fullySelected: true
-        });
-      }
-      
-      // While the user drags the mouse, points are added to the path
-      // at the position of the mouse:
-      paper.tool.onMouseDrag = function(event) {
-        path.add(event.point);
-      }
-      
-      // When the mouse is released, we simplify the path:
-      paper.tool.onMouseUp = function(event) {
-        path.simplify(10);
-        addPath(path);
-      }
-      Session.set("paper_initialized", true);
-      console.log('initialized');
+      initialize();
     }
-    console.log('rendered');
+    console.log('whiteboard rendered');
   }
+  
 }
 
 // On server startup, create some players if the database is empty.
