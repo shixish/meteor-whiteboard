@@ -1,62 +1,87 @@
+@import "elements.less";
+
 body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 200;
-    margin: 0;
-    padding: 0;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -o-user-select: none;
-    user-select: none;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 200;
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  overflow: hidden;
 }
 
-#outer {
-    width: 600px;
-    margin: 0 auto;    
+@two_pi: 3.1416 * 2;
+@deg2radians: @two_pi / 360;
+@total_icons: 5;
+@icon_size: 105;
+@extra_spacing: 15;
+@spacing: @two_pi/@total_icons;
+@distance: (@extra_spacing+@icon_size)/@spacing;
+@offset: -@two_pi/4 - @spacing;
+
+#menu{
+  position:absolute;
+  z-index: 100;
+  left: 0px;
+  top: 0px;
+  display: none;
 }
 
-.player {
-    cursor: pointer;
-    padding: 5px;
+.move-cursor{
+  cursor: move;
 }
 
-.player .name {
-    display: inline-block;
-    width: 300px;
-    font-size: 1.75em;
-}
-
-.player .score {
-    display: inline-block;
-    width: 100px;
-    text-align: right;
-    font-size: 2em;
-    font-weight: bold;
-    color: #777;
-}
-
-.player.selected {
-    background-color: yellow;
-}
-
-.player.selected .score {
-    color: black;
-}
-
-.details, .none {
-    font-weight: bold;
-    font-size: 2em;
-    border-style: dashed none none none;
-    border-color: #ccc;
-    border-width: 4px;
-    margin: 50px 10px;
-    padding: 10px 0px;
-}
-
-.none {
-    color: #777;
-}
-
-.inc {
+.icon(@x, @y){
+  background: url('drawing-icons.png') @x @y #ceeae7;
+  height: unit(@icon_size, px);
+  width: unit(@icon_size, px);
+  .rounded(55px);
+  border: 2px dashed black;
+  padding: 0;
+  margin: unit(-@icon_size/2, px);
   cursor: pointer;
+  text-align: center;
+  line-height: unit(@icon_size, px);
+  color: white;
+  font-size: 1.8em;
+  text-shadow: 2px 2px #000000;
+  &:hover{
+    background-color: #dffbf8;
+  }
+}
+
+.position(@p){
+  @x: ~`Math.cos(@{offset}+@{spacing}*@{p})*@{distance}`;
+  @y: ~`Math.sin(@{offset}+@{spacing}*@{p})*@{distance}`;
+  position: absolute;
+  top:unit(@y, px);
+  left:unit(@x, px);
+}
+
+#draw{
+  .icon(-477px, -8px);
+  .position(0);
+}
+
+#erase{
+  .icon(-477px, -200px);
+  .position(1);
+}
+
+#select{
+  .icon(-379px, -486px);
+  .position(2);
+}
+
+#move{
+  .icon(-572px, -101px );
+  .position(3);
+}
+
+#note{
+  .icon(-91px, -390px );
+  .position(4);
 }
