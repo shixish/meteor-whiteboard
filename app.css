@@ -1,0 +1,167 @@
+/* line 3, app.scss */
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 200;
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* line 25, app.scss */
+#menu {
+  position: absolute;
+  z-index: 100;
+  left: 0px;
+  top: 0px;
+  display: none;
+}
+
+/* line 33, app.scss */
+.move-cursor {
+  cursor: move;
+}
+
+/* line 64, app.scss */
+#draw {
+  background: url("drawing-icons.png") -477px -8px #ceeae7;
+  height: 105px;
+  width: 105px;
+  -webkit-border-radius: 55px;
+  -moz-border-radius: 55px;
+  -ms-border-radius: 55px;
+  -o-border-radius: 55px;
+  border-radius: 55px;
+  border: 2px dashed black;
+  padding: 0;
+  margin: -52.5px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 105px;
+  color: white;
+  font-size: 1.8em;
+  text-shadow: 2px 2px #000000;
+  position: absolute;
+  top: -29.50828px;
+  left: -90.81919px;
+}
+/* line 51, app.scss */
+#draw:hover {
+  background-color: #dffbf8;
+}
+
+/* line 69, app.scss */
+#erase {
+  background: url("drawing-icons.png") -477px -200px #ceeae7;
+  height: 105px;
+  width: 105px;
+  -webkit-border-radius: 55px;
+  -moz-border-radius: 55px;
+  -ms-border-radius: 55px;
+  -o-border-radius: 55px;
+  border-radius: 55px;
+  border: 2px dashed black;
+  padding: 0;
+  margin: -52.5px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 105px;
+  color: white;
+  font-size: 1.8em;
+  text-shadow: 2px 2px #000000;
+  position: absolute;
+  top: -95.49274px;
+  left: -0.00035px;
+}
+/* line 51, app.scss */
+#erase:hover {
+  background-color: #dffbf8;
+}
+
+/* line 74, app.scss */
+#select {
+  background: url("drawing-icons.png") -379px -486px #ceeae7;
+  height: 105px;
+  width: 105px;
+  -webkit-border-radius: 55px;
+  -moz-border-radius: 55px;
+  -ms-border-radius: 55px;
+  -o-border-radius: 55px;
+  border-radius: 55px;
+  border: 2px dashed black;
+  padding: 0;
+  margin: -52.5px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 105px;
+  color: white;
+  font-size: 1.8em;
+  text-shadow: 2px 2px #000000;
+  position: absolute;
+  top: -29.50895px;
+  left: 90.81897px;
+}
+/* line 51, app.scss */
+#select:hover {
+  background-color: #dffbf8;
+}
+
+/* line 79, app.scss */
+#move {
+  background: url("drawing-icons.png") -572px -101px #ceeae7;
+  height: 105px;
+  width: 105px;
+  -webkit-border-radius: 55px;
+  -moz-border-radius: 55px;
+  -ms-border-radius: 55px;
+  -o-border-radius: 55px;
+  border-radius: 55px;
+  border: 2px dashed black;
+  padding: 0;
+  margin: -52.5px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 105px;
+  color: white;
+  font-size: 1.8em;
+  text-shadow: 2px 2px #000000;
+  position: absolute;
+  top: 77.25538px;
+  left: 56.12906px;
+}
+/* line 51, app.scss */
+#move:hover {
+  background-color: #dffbf8;
+}
+
+/* line 84, app.scss */
+#note {
+  background: url("drawing-icons.png") -91px -390px #ceeae7;
+  height: 105px;
+  width: 105px;
+  -webkit-border-radius: 55px;
+  -moz-border-radius: 55px;
+  -ms-border-radius: 55px;
+  -o-border-radius: 55px;
+  border-radius: 55px;
+  border: 2px dashed black;
+  padding: 0;
+  margin: -52.5px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 105px;
+  color: white;
+  font-size: 1.8em;
+  text-shadow: 2px 2px #000000;
+  position: absolute;
+  top: 77.25496px;
+  left: -56.12962px;
+}
+/* line 51, app.scss */
+#note:hover {
+  background-color: #dffbf8;
+}

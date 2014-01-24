@@ -1,0 +1,87 @@
+@import "compass";
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 200;
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+$two_pi: 3.1416 * 2;
+$deg2radians: $two_pi / 360;
+$total_icons: 5;
+$icon_size: 105px;
+$extra_spacing: 15px;
+$spacing: $two_pi/$total_icons;
+$distance: ($extra_spacing+$icon_size)/$spacing;
+$offset: -$two_pi/4 - $spacing;
+
+#menu{
+  position:absolute;
+  z-index: 100;
+  left: 0px;
+  top: 0px;
+  display: none;
+}
+
+.move-cursor{
+  cursor: move;
+}
+
+@mixin icon($x, $y){
+  background: url('drawing-icons.png') $x $y #ceeae7;
+  height: $icon_size;
+  width: $icon_size;
+  @include border-radius(55px);
+  border: 2px dashed black;
+  padding: 0;
+  margin: -$icon_size/2;
+  cursor: pointer;
+  text-align: center;
+  line-height: $icon_size;
+  color: white;
+  font-size: 1.8em;
+  text-shadow: 2px 2px #000000;
+  &:hover{
+    background-color: #dffbf8;
+  }
+}
+
+@mixin position($p){
+  $x: cos($offset+$spacing*$p)*$distance;
+  $y: sin($offset+$spacing*$p)*$distance;
+  position: absolute;
+  top:$y;
+  left:$x;
+}
+
+#draw{
+  @include icon(-477px, -8px);
+  @include position(0);
+}
+
+#erase{
+  @include icon(-477px, -200px);
+  @include position(1);
+}
+
+#select{
+  @include icon(-379px, -486px);
+  @include position(2);
+}
+
+#move{
+  @include icon(-572px, -101px );
+  @include position(3);
+}
+
+#note{
+  @include icon(-91px, -390px );
+  @include position(4);
+}
