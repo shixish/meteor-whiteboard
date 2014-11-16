@@ -127,7 +127,8 @@ if (Meteor.isClient) {
     var path;
     this.onMouseDown = function(event){
       var e = event.event;
-      if (e.button == 0){//left click
+      if ((e.button == 0) || //left click
+	  (typeof(e.button) == "undefined")){ // not mouse
         path = new paper.Path({
           segments: [event.point],
           strokeColor: 'black',
